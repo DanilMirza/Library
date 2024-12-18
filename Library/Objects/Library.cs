@@ -6,7 +6,7 @@ namespace Library
     {
         public readonly string Name;
         private readonly List<Client> _clients = new List<Client>();
-        private readonly Dictionary<int, Book> _books = new Dictionary<int, Book>();
+        private readonly List<Book> _books = new List<Book>();
 
         public Library(string name) 
         {
@@ -27,19 +27,29 @@ namespace Library
 
         public void AddBook(Book book)
         {
-            _books.Add(_books.Count, book);
+            _books.Add(book);
         }
 
         public void RemoveBook(int id)
         {
-            _books.Remove(id);
+            _books.RemoveAt(id);
         }
 
         public List<Book> GetBooks()
         {
             List<Book> books = new List<Book>();
-            foreach (Book book in _books.Values) books.Add(book);
+            books.AddRange(_books);
             return books;
+        }
+
+        public int GetCountIssuedBooks()
+        {
+            int count = 0;
+            foreach (Book book in _books)
+            {
+                if (book.IsIssued) count++;
+            }
+            return count;
         }
     }
 }

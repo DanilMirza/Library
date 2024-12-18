@@ -4,69 +4,70 @@ namespace Library.Pages
 {
     public abstract class RegisterBookPage
     {
+        private static int _selected = 0;
         private static Book book;
 
         public static void Print()
         {
             Program.Width = 70;
             Program.Height = 8;
-            PrintRegisterBookPage(0);
-            int selected = 0;
+            PrintRegisterBookPage();
 
             while (true)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 if (keyInfo.Key == ConsoleKey.Enter)
                 {
-                    if (selected == 0)
+                    if (_selected == 0)
                     {
                         book = null;
                         MainPage.Print();
                     }
-                    else if (selected == 1)
+                    else if (_selected == 1)
                     {
                         Program.Library.AddBook(book);
+                        book = null;
                         MainPage.Print();
                     }
                     break;
                 }
                 else if (keyInfo.Key == ConsoleKey.UpArrow)
                 {
-                    if (selected <= 0) selected = 1;
-                    else selected--;
+                    if (_selected <= 0) _selected = 1;
+                    else _selected--;
 
-                    PrintRegisterBookPage(selected);
+                    PrintRegisterBookPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.DownArrow)
                 {
-                    if (selected >= 1) selected = 0;
-                    else selected++;
+                    if (_selected >= 1) _selected = 0;
+                    else _selected++;
 
-                    PrintRegisterBookPage(selected);
+                    PrintRegisterBookPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.RightArrow)
                 {
-                    selected = 1;
+                    _selected = 1;
 
-                    PrintRegisterBookPage(selected);
+                    PrintRegisterBookPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.LeftArrow)
                 {
-                    selected = 0;
+                    _selected = 0;
 
-                    PrintRegisterBookPage(selected);
+                    PrintRegisterBookPage();
                 }
             }
         }
 
-        private static void PrintRegisterBookPage(int i)
+        private static void PrintRegisterBookPage()
         {
             Console.Clear();
             Page.PrintTitle("Регистрация новой книги");
-            PrintRegisterBookPageActions(i);
+            PrintRegisterBookPageActions();
         }
 
-        private static void PrintRegisterBookPageActions(int i)
+        private static void PrintRegisterBookPageActions()
         {
             if (book == null)
             {
@@ -97,7 +98,7 @@ namespace Library.Pages
             {
                 if (j == 1) Console.CursorLeft = Program.Width - actions[1].Length;
 
-                if (j == i)
+                if (j == _selected)
                 {
                     Console.BackgroundColor = ConsoleColor.White;
                     Console.ForegroundColor = ConsoleColor.Black;

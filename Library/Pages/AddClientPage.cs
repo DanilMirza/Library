@@ -2,15 +2,16 @@
 
 namespace Library.Pages
 {
-    public abstract class AboutLibraryPage
+    public abstract class AddClientPage
     {
         private static int _selected = 0;
+        private static Client client;
 
         public static void Print()
         {
             Program.Width = 70;
-            Program.Height = 30;
-            PrintAboutLibraryPage();
+            Program.Height = 7;
+            PrintAddClientPage();
 
             while (true)
             {
@@ -19,12 +20,14 @@ namespace Library.Pages
                 {
                     if (_selected == 0)
                     {
+                        client = null;
                         MainPage.Print();
                     }
                     else if (_selected == 1)
                     {
+                        Program.Library.AddClient(client);
+                        client = null;
                         MainPage.Print();
-                        //страница для изменения "о библтотеке"
                     }
                     break;
                 }
@@ -33,42 +36,59 @@ namespace Library.Pages
                     if (_selected <= 0) _selected = 1;
                     else _selected--;
 
-                    PrintAboutLibraryPage();
+                    PrintAddClientPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.DownArrow)
                 {
                     if (_selected >= 1) _selected = 0;
                     else _selected++;
 
-                    PrintAboutLibraryPage();
+                    PrintAddClientPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.RightArrow)
                 {
                     _selected = 1;
 
-                    PrintAboutLibraryPage();
+                    PrintAddClientPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.LeftArrow)
                 {
                     _selected = 0;
 
-                    PrintAboutLibraryPage();
+                    PrintAddClientPage();
                 }
             }
         }
 
-        private static void PrintAboutLibraryPage()
+        private static void PrintAddClientPage()
         {
             Console.Clear();
-            Page.PrintTitle("О библиотеке");
-            PrintAboutLibraryPageActions();
+            Page.PrintTitle("Добавление клиента");
+            PrintAddClientPageActions();
         }
 
-        static void PrintAboutLibraryPageActions()
+        private static void PrintAddClientPageActions()
         {
+            if (client == null)
+            {
+                Console.CursorVisible = true;
+                Console.Write("ФИО           :");
+                string fullName = Console.ReadLine();
+                Console.Write("Номер телефона:");
+                string phoneNumber = Console.ReadLine();
+                Console.CursorVisible = false;
+
+                client = new Client(fullName, phoneNumber);
+            }
+            else
+            {
+                Console.WriteLine($"ФИО           :{client.FullName}");
+                Console.WriteLine($"Номер телефона:{client.PhoneNumber}");
+            }
+
             string[] actions = {
-                "< Назад",
-                "Изменить"
+                "Отмена",
+                "Добавить"
             };
 
             for (int j = 0; j < actions.Length; j++)
@@ -86,21 +106,6 @@ namespace Library.Pages
                 else
                 {
                     Console.Write(actions[j]);
-                }
-
-                if (j == 1)
-                {
-                    Console.WriteLine("\n" +
-                        "Расписание\n" +
-                        " - Понедельник:  9:00 - 18:00\n" +
-                        " - Вторник:      9:00 - 18:00\n" +
-                        " - Среда:        9:00 - 18:00\n" +
-                        " - Четверг:      9:00 - 18:00\n" +
-                        " - Пятница:      9:00 - 18:00\n" +
-                        " - Суббота:     11:00 - 16:00\n" +
-                        " - Воскресенье: 11:00 - 16:00\n" +
-                        "Описание:\n" +
-                        "   Очень хорошая библиотека.");
                 }
             }
         }

@@ -4,77 +4,85 @@ namespace Library.Pages
 {
     public abstract class MainPage
     {
+        private static int _selected = 0;
+        
         public static void Print()
         {
             Program.Width = 70;
             Program.Height = 13;
-            PrintMainPage(0);
-            int selected = 0;
+            PrintMainPage();
 
             while (true)
             {
                 ConsoleKeyInfo keyInfo = Console.ReadKey(true);
                 if (keyInfo.Key == ConsoleKey.Enter)
                 {
-                    if (selected == 0)
+                    switch (_selected)
                     {
-                        AboutLibraryPage.Print();
+                        case 0: 
+                            { 
+                                AboutLibraryPage.Print(); 
+                                break;
+                            }
+                        case 1:
+                            {
+                                RegisterBookPage.Print();
+                                break;
+                            }
+                        case 2:
+                            {
+                                BookViewingPage.Print();
+                                break;
+                            }
+                        case 3:
+                            {
+                                AddClientPage.Print();
+                                break;
+                            }
+                        case 4:
+                            {
+                                ClientViewingPage.Print();
+                                break;
+                            }
                     }
-                    else if (selected == 1)
-                    {
-                        RegisterBookPage.Print();
-                    }
-                    else if (selected == 2)
-                    {
-                        Console.WriteLine(2);
-                    }
-                    else if (selected == 3)
-                    {
-                        Console.WriteLine(3);
-                    }
-                    else if (selected == 4)
-                    {
-                        Console.WriteLine(4);
-                    }
-                    break;
                 }
                 else if (keyInfo.Key == ConsoleKey.UpArrow)
                 {
-                    if (selected <= 0) selected = 4;
-                    else selected--;
+                    if (_selected <= 0) _selected = 4;
+                    else _selected--;
 
-                    PrintMainPage(selected);
+                    PrintMainPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.DownArrow)
                 {
-                    if (selected >= 4) selected = 0;
-                    else selected++;
+                    if (_selected >= 4) _selected = 0;
+                    else _selected++;
 
-                    PrintMainPage(selected);
+                    PrintMainPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.RightArrow)
                 {
-                    selected = 4;
+                    _selected = 4;
 
-                    PrintMainPage(selected);
+                    PrintMainPage();
                 }
                 else if (keyInfo.Key == ConsoleKey.LeftArrow)
                 {
-                    selected = 0;
+                    _selected = 0;
 
-                    PrintMainPage(selected);
+                    PrintMainPage();
                 }
             }
         }
 
-        static void PrintMainPage(int i)
+        static void PrintMainPage()
         {
             Console.Clear();
             Page.PrintTitle("Главное меню");
-            PrintMainPageActions(i);
+            PrintMainPageActions();
         }
 
-        static void PrintMainPageActions(int i)
+        static void PrintMainPageActions()
         {
             string[] actions = {
                 "О библиотеке",
@@ -89,7 +97,7 @@ namespace Library.Pages
                 else if (j == 1) Console.WriteLine("Книги:");
                 else if (j == 3) Console.WriteLine("Клиенты:");
 
-                if (j == i)
+                if (j == _selected)
                 {
                     Console.BackgroundColor = ConsoleColor.White;
                     Console.ForegroundColor = ConsoleColor.Black;
